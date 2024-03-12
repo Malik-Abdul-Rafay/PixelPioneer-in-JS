@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelPioneer Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #pixelCanvas {
+            display: grid;
+            grid-template-columns: repeat(20, 30px);
+            gap: 1px;
+        }
+
+        .pixel {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        #eraserButton, #resetButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #eraserButton:hover, #resetButton:hover {
+            background-color: #ddd;
+        }
+
+        #colorPicker {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PixelPioneer - Pixel Art Creator</h1>
+        <input type="color" id="colorPicker" value="#000000" onchange="updateColor()">
+        <button id="eraserButton" onclick="toggleEraser()">Eraser</button>
+        <button id="resetButton" onclick="resetCanvas()">Reset</button>
+        <div id="pixelCanvas"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pixelCanvas = document.getElementById('pixelCanvas');
+            let isEraserActive = false;
+            let selectedColor = '#000000';
+    
+            // Create pixel grid
+            for (let i = 0; i < 20 * 20; i++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('pixel');
+                pixel.addEventListener('click', colorPixel);
+                pixelCanvas.appendChild(pixel);
+            }
+    
+            function colorPixel(event) {
+                const pixel = event.target;
+                if (isEraserActive) {
+                    pixel.style.backgroundColor = '';
+                } else {
+                    pixel.style.backgroundColor = selectedColor;
+                }
+            }
+    
+            function toggleEraser() {
+                isEraserActive = !isEraserActive;
+                const eraserButton = document.getElementById('eraserButton');
+                eraserButton.style.backgroundColor = isEraserActive ? '#ddd' : '';
+            }
+    
+            function updateColor() {
+                selectedColor = document.getElementById('colorPicker').value;
+            }
+    
+            function resetCanvas() {
+                const pixels = document.querySelectorAll('.pixel');
+                pixels.forEach(pixel => {
+                    pixel.style.backgroundColor = '';
+                });
+            }
+    
+            const eraserButton = document.getElementById('eraserButton');
+            const resetButton = document.getElementById('resetButton');
+            const colorPicker = document.getElementById('colorPicker');
+    
+            eraserButton.addEventListener('click', toggleEraser);
+            resetButton.addEventListener('click', resetCanvas);
+            colorPicker.addEventListener('input', updateColor);
+        });
+    </script>
+    
+</body>
+</html>
